@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -24,16 +24,16 @@ namespace DBProject
         {
             myDAL objmyDAl = new myDAL();
 
-            
-            string dID1 = (string)Session["dID"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            string dID1 = Session["dID"] != null ? (string)Session["dID"] : "0";
 
             int dID = Convert.ToInt32(dID1);
 
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int pID = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
 
-            int pID = (int)Session["idoriginal"];
-
-
-            string temp = (string)Session["freeSlot"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            string temp = Session["freeSlot"] != null ? (string)Session["freeSlot"] : "0";
 
             int freeSlot = Convert.ToInt32(temp);
 

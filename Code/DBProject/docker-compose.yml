@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  clinicmanagementsystem:
+    image: clinicmanagementsystem:latest
+    build:
+      context: ../..
+      dockerfile: Code/DBProject/Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - ASPNET_ENV=Production
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_NAME=${DB_NAME:-DBProject}
+      - DB_USER=${DB_USER:-sa}
+      - DB_PASSWORD=${DB_PASSWORD:-}
+      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING:-}
+      - REDIS_HOST=${REDIS_HOST:-localhost}
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - REDIS_ACCESS_KEY=${REDIS_ACCESS_KEY:-}
+      - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY:-}
+    volumes:
+      - app-logs:C:\inetpub\logs
+    healthcheck:
+      test: ["CMD", "powershell", "-Command", "try { $r = Invoke-WebRequest -Uri http://localhost/Health.aspx -UseBasicParsing; if ($r.StatusCode -eq 200) { exit 0 } else { exit 1 } } catch { exit 1 }"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  app-logs:
+
+networks:
+  default:
+    name: app-network

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,6 +18,7 @@ namespace DBProject
         {
 			if (!IsPostBack)
 			{
+                // Distributed Redis-backed session (ElastiCache on EKS) - initialize in distributed session
 				Session["aID"] = "";
 				pendingFeedback(sender, e);
 			}
@@ -32,7 +33,8 @@ namespace DBProject
         {
             myDAL objmyDAl = new myDAL();
 
-            int pid = (int)Session["idoriginal"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int pid = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
 
             string dName = "";
             string timings = "";
@@ -53,6 +55,7 @@ namespace DBProject
 
             else
             {
+                // Distributed Redis-backed session (ElastiCache on EKS) - store in distributed session
                 Session["aID"] = aID;
 
                 FDoctor.Text = "Your feedback for the appointment with Doctor " + dName + " is pending. Kindly give it.";
@@ -76,7 +79,8 @@ namespace DBProject
         {
             myDAL objmyDAl = new myDAL();
 
-            int aID = (int)Session["aID"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int aID = Session["aID"] != null ? (int)Session["aID"] : 0;
 
 
             int rating = Convert.ToInt32(List.SelectedItem.Value);

@@ -1,0 +1,69 @@
+# .NET Framework / ASP.NET Web Forms project - Docker ignore file
+# Excludes build artifacts, IDE files, and sensitive data from Docker build context
+
+# Build output directories
+bin/
+obj/
+publish/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# VS Code
+.vscode/
+
+# NuGet packages (restored during build)
+packages/
+*.nupkg
+!Code/DBProject/packages.config
+
+# Roslyn compiler output
+bin/roslyn/
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation and images (not needed in container)
+*.md
+*.pdf
+images/
+Database\ Files/
+*.sql
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Test projects
+*Tests/
+*Test/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Launch settings (dev only)
+Properties/launchSettings.json
+
+# Environment files
+.env
+.env.*

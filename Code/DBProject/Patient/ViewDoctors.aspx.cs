@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +14,7 @@ namespace DBProject
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Distributed Redis-backed session (ElastiCache on EKS) - initialize in distributed session
             Session["dID"] = "";
             deptDoctorInfo(sender, e);
         }
@@ -26,7 +27,8 @@ namespace DBProject
                 Int16 num = Convert.ToInt16(e.CommandArgument);
 
                 string dID = TDoctorGrid.Rows[num].Cells[2].Text;
-  
+
+                // Distributed Redis-backed session (ElastiCache on EKS) - store in distributed session
                 Session["dID"] = dID;
 
                 Response.BufferOutput = true;
@@ -46,6 +48,7 @@ namespace DBProject
 
             DataTable DT = new DataTable();
 
+            // Distributed Redis-backed session (ElastiCache on EKS) - retrieve from distributed session
             string deptName = (string) Session["deptOriginal"];
 
             int status = objmyDAl.getDeptDoctorInfo(deptName, ref DT);
@@ -58,6 +61,7 @@ namespace DBProject
 
             else
             {
+                // Distributed Redis-backed session (ElastiCache on EKS) - retrieve from distributed session
                 TDoctor.Text = "Following are our Specialized Doctors of " + Session["deptOriginal"] + " Department:";
                 TDoctorGrid.DataSource = DT;
                 TDoctorGrid.DataBind();

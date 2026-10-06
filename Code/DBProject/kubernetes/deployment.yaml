@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinicmanagementsystem
+  namespace: clinicmanagementsystem
+  labels:
+    app: clinicmanagementsystem
+    version: "1.0"
+    managed-by: kubectl
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: clinicmanagementsystem
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: clinicmanagementsystem
+        version: "1.0"
+    spec:
+      # Windows node selector required for .NET Framework Windows containers
+      nodeSelector:
+        kubernetes.io/os: windows
+      containers:
+        - name: clinicmanagementsystem
+          image: "{{IMAGE_URI}}"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: ASPNET_ENV
+              value: "Production"
+            - name: DB_CONNECTION_STRING
+              value: "{{DB_CONNECTION_STRING}}"
+            - name: DB_HOST
+              value: "{{DB_HOST}}"
+            - name: DB_NAME
+              value: "{{DB_NAME}}"
+            - name: DB_USER
+              value: "{{DB_USER}}"
+            - name: DB_PASSWORD
+              value: "{{DB_PASSWORD}}"
+            - name: REDIS_HOST
+              value: "{{REDIS_HOST}}"
+            - name: REDIS_PORT
+              value: "{{REDIS_PORT}}"
+            - name: REDIS_ACCESS_KEY
+              value: "{{REDIS_ACCESS_KEY}}"
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              value: "{{APPINSIGHTS_INSTRUMENTATIONKEY}}"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+          livenessProbe:
+            httpGet:
+              path: /Health.aspx
+              port: 80
+            initialDelaySeconds: 90
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /Health.aspx
+              port: 80
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - name: app-logs
+              mountPath: C:\inetpub\logs
+      volumes:
+        - name: app-logs
+          emptyDir: {}
+      terminationGracePeriodSeconds: 60

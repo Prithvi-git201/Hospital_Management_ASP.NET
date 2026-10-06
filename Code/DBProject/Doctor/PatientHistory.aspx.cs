@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,7 +18,8 @@ namespace doctor
                 DataTable dt = new DataTable();
                 int found = 0;
 
-                int did = (int)Session["idoriginal"];
+                // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+                int did = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
 
                 found = objmydal.search_patient_DAL(did, ref dt);
                 if (found != 1)
@@ -43,6 +44,7 @@ namespace doctor
                 //retrieve appointmentid  from that row (key-non editable)
                 int appointmentid = Convert.ToInt32(aId);
 
+                // Distributed Redis-backed session (ElastiCache on EKS) - store in distributed session
                 Session["appointid"] = appointmentid;
                 Response.Redirect("Historyupdate.aspx");
             }

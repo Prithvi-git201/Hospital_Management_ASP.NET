@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +14,7 @@ namespace DBProject
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Distributed Redis-backed session (ElastiCache on EKS) - initialize in distributed session
             Session["freeSlot"] = "";
             freeSlots(sender, e);
         }
@@ -30,6 +31,7 @@ namespace DBProject
 
                 string[] tokens = appointment.Split(':');
 
+                // Distributed Redis-backed session (ElastiCache on EKS) - store in distributed session
                 Session["freeSlot"] = tokens[0];
 
                 Response.BufferOutput = true;
@@ -48,13 +50,13 @@ namespace DBProject
 
             DataTable DT = new DataTable();
 
-
-            string dID1 = (string)Session["dID"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            string dID1 = Session["dID"] != null ? (string)Session["dID"] : "0";
 
             int dID = Convert.ToInt32(dID1);
 
-
-            int pID = (int)Session["idoriginal"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int pID = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
 
             
             int status = objmyDAl.getFreeSlots(dID, pID, ref DT);

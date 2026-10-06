@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -26,7 +26,8 @@ namespace DBProject
         {
             myDAL objmyDAl = new myDAL();
 
-            string dID1 = (string) Session["dID"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            string dID1 = Session["dID"] != null ? (string)Session["dID"] : "0";
 
             int dID = Convert.ToInt32(dID1);
 
@@ -42,7 +43,8 @@ namespace DBProject
             int workE = 0;
             int age = 0;
 
-            string deptName = (string)Session["deptOriginal"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            string deptName = Session["deptOriginal"] != null ? (string)Session["deptOriginal"] : "";
 
             int status = objmyDAl.doctorInfoDisplayer(dID, ref name, ref phone, ref gender, ref charges_Per_Visit, ref ReputeIndex, ref PatientsTreated, ref qualification, ref specialization, ref workE, ref age);
 

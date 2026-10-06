@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,7 +18,8 @@ namespace doctor
             DataTable dt = new DataTable();
             int found;
 
-            int did = (int)Session["idoriginal"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int did = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
             
             found = objmyDAL.generate_bill_DAL(did, ref dt);
 
@@ -35,8 +36,9 @@ namespace doctor
         {
             myDAL objmyDAL = new myDAL();
             
-            int  did = (int)Session["idoriginal"];
-            int appoint = (int)Session["appointid"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int did = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
+            int appoint = Session["appointid"] != null ? (int)Session["appointid"] : 0;
             objmyDAL.paid_bill_DAL(did,appoint);
 
 			Response.BufferOutput = false;
@@ -48,8 +50,9 @@ namespace doctor
         {
             myDAL objmyDAL = new myDAL();
 
-            int did = (int)Session["idoriginal"];
-            int appoint = (int)Session["appointid"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int did = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
+            int appoint = Session["appointid"] != null ? (int)Session["appointid"] : 0;
             objmyDAL.Unpaid_bill_DAL(did, appoint);
 
             Response.BufferOutput = false;

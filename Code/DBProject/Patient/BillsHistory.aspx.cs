@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -26,8 +26,8 @@ namespace DBProject
 
             DataTable DT = new DataTable();
 
-
-            int id = (int)Session["idoriginal"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int id = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
 
 
             int status = objmyDAl.getBillHistory(id, ref DT);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -25,7 +25,8 @@ namespace DBProject
         {
             myDAL objmyDAl = new myDAL();
 
-            int pid = (int)Session["idoriginal"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int pid = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
 
             string dName = "";
             string timings = "";
@@ -69,10 +70,6 @@ namespace DBProject
 
 
         //-----------------------Add a new function here------------------//
-
-
-
-
 
 
     }

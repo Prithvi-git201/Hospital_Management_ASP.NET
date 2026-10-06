@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -27,7 +27,7 @@ namespace DBProject
 
             DataTable DT = new DataTable();
 
-
+            // Distributed Redis-backed session (ElastiCache on EKS) - retrieve from distributed session
             int id = (int)Session["idoriginal"];
 
 

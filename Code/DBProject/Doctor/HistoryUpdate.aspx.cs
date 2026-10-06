@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,12 +20,14 @@ namespace doctor
         {
             myDAL objmyDAL = new myDAL();
             int found;
-            int did = (int)Session["idoriginal"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int did = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
             string disease= Disease.Text;
             string progres = progress.Text;
             string prescrip = Prescription.Text;
 
-            int appid = (int)Session["appointid"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int appid = Session["appointid"] != null ? (int)Session["appointid"] : 0;
 
             
             found = objmyDAL.update_prescription_DAL(did,appid,disease,progres,prescrip);

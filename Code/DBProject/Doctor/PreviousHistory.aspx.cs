@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -27,8 +27,8 @@ namespace DBProject.Doctor
 
             DataTable DT = new DataTable();
 
-
-            int id = (int)Session["idoriginal"];
+            // Distributed Redis-backed session (ElastiCache on EKS) - safe null-checked access
+            int id = Session["idoriginal"] != null ? (int)Session["idoriginal"] : 0;
 
 
             int status = objmyDAl.getPHistory(id, ref DT);
@@ -51,9 +51,6 @@ namespace DBProject.Doctor
 
 
         //-----------------------Add a new function here------------------//
-
-
-
 
 
     }

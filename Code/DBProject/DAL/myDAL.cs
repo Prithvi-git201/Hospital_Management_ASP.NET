@@ -13,9 +13,16 @@ namespace DBProject.DAL
 	//Database Layer of 3 tier architecture
 	public class myDAL
     {
-		//connection string of the server database
+		// Connection string resolved from environment variable DB_CONNECTION_STRING (container/Kubernetes-injected).
+        // Falls back to DB_HOST/DB_NAME/DB_USER/DB_PASSWORD individual variables if the full string is not set.
+        // This replaces the Web.config XDT transform-based ConfigurationManager lookup (cz-dotnet-0055).
         private static readonly string connString =
-            System.Configuration.ConfigurationManager.ConnectionStrings["sqlCon1"].ConnectionString;
+            System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
+            ?? string.Format("Data Source={0};Initial Catalog={1};User Id={2};Password={3};",
+                System.Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost",
+                System.Environment.GetEnvironmentVariable("DB_NAME") ?? "DBProject",
+                System.Environment.GetEnvironmentVariable("DB_USER") ?? "sa",
+                System.Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "");
 
 
 
